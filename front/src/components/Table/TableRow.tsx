@@ -1,9 +1,11 @@
-export const TableRow = () => {
+export const TableRow = ({ values }: { values: string[] }) => {
   return (
     <tr>
-      <td>
-        <div>Item</div>
-      </td>
+      {values.map((value, idx) => (
+        <td key={`tr-${idx}-${value}`}>
+          <div>{value}</div>
+        </td>
+      ))}
     </tr>
   );
 };

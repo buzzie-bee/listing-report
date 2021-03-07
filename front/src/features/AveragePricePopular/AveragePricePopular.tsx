@@ -1,5 +1,8 @@
 import { useCallback } from 'react';
 import { useAsync } from 'react-async-hook';
+import { Table } from '../../components/Table/Table';
+import { TableHeaders } from '../../components/Table/TableHeaders';
+import { TableRow } from '../../components/Table/TableRow';
 
 export const AveragePricePopular = () => {
   const fetchAveragePricePopular = useCallback(async () => {
@@ -22,9 +25,12 @@ export const AveragePricePopular = () => {
         </div>
       )}
       {result && (
-        <div>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
-        </div>
+        <Table>
+          <TableHeaders headers={['Average Price']} />
+          <tbody>
+            {result && <TableRow values={[result.averagePrice.toString()]} />}
+          </tbody>
+        </Table>
       )}
     </div>
   );

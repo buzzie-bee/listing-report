@@ -1,13 +1,3 @@
-import { TableHeaders } from './TableHeaders';
-import { TableRow } from './TableRow';
-
-export const Table = () => {
-  return (
-    <table className="">
-      <TableHeaders />
-      <tbody className="">
-        <TableRow />
-      </tbody>
-    </table>
-  );
+export const Table = ({ children }: { children: React.ReactNode }) => {
+  return <table className="">{children}</table>;
 };

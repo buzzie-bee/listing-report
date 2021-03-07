@@ -1,5 +1,9 @@
 import { useCallback } from 'react';
 import { useAsync } from 'react-async-hook';
+import { Table } from '../../components/Table/Table';
+import { TableHeaders } from '../../components/Table/TableHeaders';
+import { TableRow } from '../../components/Table/TableRow';
+import { DistributionType } from './Distribution.interface';
 
 export const Distribution = () => {
   const fetchDistribution = useCallback(async () => {
@@ -22,9 +26,19 @@ export const Distribution = () => {
         </div>
       )}
       {result && (
-        <div>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
-        </div>
+        <Table>
+          <TableHeaders headers={['Make', 'Distribution']} />
+          <tbody>
+            {result.distributionData.map(
+              ({ make, distribution }: DistributionType) => (
+                <TableRow
+                  key={`tr-${make}`}
+                  values={[make, distribution.toString()]}
+                />
+              )
+            )}
+          </tbody>
+        </Table>
       )}
     </div>
   );

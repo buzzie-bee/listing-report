@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
 import { useAsync } from 'react-async-hook';
 
+import { Table } from '../../components/Table/Table';
+import { TableHeaders } from '../../components/Table/TableHeaders';
+import { TableRow } from '../../components/Table/TableRow';
+
+import { AverageSellerPrice } from './AverageBySeller.interface';
+
 export const AverageBySeller = () => {
   const fetchAverageBySeller = useCallback(async () => {
     return await (await fetch('/api/reports/average')).json();
@@ -22,9 +28,19 @@ export const AverageBySeller = () => {
         </div>
       )}
       {result && (
-        <div>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
-        </div>
+        <Table>
+          <TableHeaders headers={['Seller Type', 'Average in EUR']} />
+          <tbody>
+            {Object.entries(result as AverageSellerPrice).map(
+              ([type, price]: [string, number]) => (
+                <TableRow
+                  key={`seller-${type}`}
+                  values={[type, price.toString()]}
+                />
+              )
+            )}
+          </tbody>
+        </Table>
       )}
     </div>
   );
