@@ -4,6 +4,7 @@ import {
   AverageSellerPrice,
   DistributionData,
   PopularAveragePrice,
+  MostContactedListingsByMonth,
 } from './report.interface';
 
 export const reportRouter = express.Router();
@@ -38,6 +39,20 @@ reportRouter.get(
       const averagePrice: PopularAveragePrice = await ReportService.getPopularAveragePrice();
 
       res.status(200).send(averagePrice);
+    } catch (e) {
+      res.status(500).send(e.message);
+    }
+  }
+);
+
+// GET top 5 listings by month
+reportRouter.get(
+  '/mostContactedListings',
+  async (req: Request, res: Response) => {
+    try {
+      const mostContactedListings: MostContactedListingsByMonth = await ReportService.getMostContactsListings();
+
+      res.status(200).send(mostContactedListings);
     } catch (e) {
       res.status(500).send(e.message);
     }

@@ -32,3 +32,11 @@ it('Returns an average price object', async () => {
   expect(result.body).toHaveProperty('averagePrice');
   expect(typeof result.body.averagePrice).toBe('number');
 });
+
+it('Returns the most contacted listings by month object', async () => {
+  const result = await supertest(testApp).get('/reports/mostContactedListings');
+  expect(result.status).toEqual(200);
+  expect(result.type).toBe('application/json');
+  expect(result.body).toHaveProperty('data');
+  expect(Array.isArray(result.body.data)).toBe(true);
+});

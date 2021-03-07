@@ -61,6 +61,21 @@ export interface ListingsObject {
   [key: string]: Listing;
 }
 
-export interface MostContactedListings {
-  [key: string]: Listing;
+export interface MostContactedListing {
+  ranking: number;
+  id: string;
+  make: string;
+  price: number;
+  milage: number;
+  contacts: number;
+}
+
+export interface ContactListingMonthData {
+  total: number;
+  monthData: { [key: string]: { [key: string]: number } };
+  months: string[];
+}
+
+export interface MostContactedListingsByMonth {
+  data: { month: string; listings: MostContactedListing[] }[];
 }
