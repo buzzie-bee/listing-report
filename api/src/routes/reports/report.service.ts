@@ -1,7 +1,10 @@
 import {
   AverageSellerPrice,
+  Distribution,
+  DistributionData,
   Listing,
   ListingSellerData,
+  ListingsMakeData,
 } from './report.interface';
 import fs from 'fs';
 import csvParse from 'csv-parse';
@@ -104,4 +107,65 @@ const calculateAverageSellerPrice = async (): Promise<AverageSellerPrice> => {
 
 export const getAverageSellerPrice = async (): Promise<AverageSellerPrice> => {
   return calculateAverageSellerPrice();
+};
+
+const calculateDistributionData = async (): Promise<DistributionData> => {
+  // reduce the listings.csv data to find number of times each make appears and then
+  // calculate distribution of each
+
+  const records: Listing[] = await processListingFile('./data/listings.csv');
+
+  const initData: ListingsMakeData = {
+    total: 0,
+    makeData: {},
+    makes: [],
+  };
+
+  // Reduce makeData into total, count for each make, and array of makes for mapping
+  const makeData = records.reduce((data, { make }: Listing) => {
+    try {
+      if (data.makeData[make]) {
+        data.makeData[make]++;
+      } else {
+        data.makes.push(make);
+        data.makeData[make] = 1;
+      }
+      data.total++;
+      return data;
+    } catch (err) {
+      throw err;
+    }
+  }, initData);
+
+  const distributionData: Distribution[] = makeData.makes.map((make) => {
+    const percentage = (makeData.makeData[make] / makeData.total) * 100;
+    const distribution = Math.floor(percentage);
+    return {
+      make,
+      distribution,
+    };
+  });
+
+  //Sort distribution data by distribution amount
+  distributionData.sort(
+    (a: Distribution, b: Distribution) => b.distribution - a.distribution
+  );
+
+  // If we have a total and we have distribution data return
+  if (makeData.total > 0 && distributionData.length) {
+    return {
+      total: makeData.total,
+      distributionData,
+    };
+  }
+
+  // Otherwise return -1
+  return {
+    total: -1,
+    distributionData: [],
+  };
+};
+
+export const getDistributionData = async (): Promise<DistributionData> => {
+  return calculateDistributionData();
 };

@@ -14,8 +14,22 @@ export interface ListingSellerData {
   otherTotalPrice: number;
 }
 
+export interface Distribution {
+  make: string;
+  distribution: number;
+}
+
+export interface ListingsMakeData {
+  total: number;
+  makeData: {
+    [key: string]: number;
+  };
+  makes: string[];
+}
+
 export interface DistributionData {
-  [key: string]: number;
+  total: number;
+  distributionData: Distribution[];
 }
 
 export interface AveragePopularPrice {
