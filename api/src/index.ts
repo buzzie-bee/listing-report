@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import config from './config/config';
+import config from './common/config/config';
 
 import { errorHandler } from './middleware/error.middleware';
 import { routeNotFoundHandler } from './middleware/routeNotFound.middleware';

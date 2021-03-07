@@ -3,7 +3,7 @@ import supertest from 'supertest';
 
 describe('GET /api/reports/average', () => {
   it('Returns an average report object', async () => {
-    const result = await supertest(testApp).get('/reports/average');
+    const result = await supertest(testApp).get('/api/reports/average');
     expect(result.status).toEqual(200);
     expect(result.type).toBe('application/json');
     expect(result.body).toHaveProperty('dealer');
@@ -16,7 +16,7 @@ describe('GET /api/reports/average', () => {
 });
 
 it('Returns a distribution report object', async () => {
-  const result = await supertest(testApp).get('/reports/distribution');
+  const result = await supertest(testApp).get('/api/reports/distribution');
   expect(result.status).toEqual(200);
   expect(result.type).toBe('application/json');
   expect(result.body).toHaveProperty('total');
@@ -26,7 +26,9 @@ it('Returns a distribution report object', async () => {
 });
 
 it('Returns an average price object', async () => {
-  const result = await supertest(testApp).get('/reports/averagePopularPrice');
+  const result = await supertest(testApp).get(
+    '/api/reports/averagePopularPrice'
+  );
   expect(result.status).toEqual(200);
   expect(result.type).toBe('application/json');
   expect(result.body).toHaveProperty('averagePrice');
@@ -34,7 +36,9 @@ it('Returns an average price object', async () => {
 });
 
 it('Returns the most contacted listings by month object', async () => {
-  const result = await supertest(testApp).get('/reports/mostContactedListings');
+  const result = await supertest(testApp).get(
+    '/api/reports/mostContactedListings'
+  );
   expect(result.status).toEqual(200);
   expect(result.type).toBe('application/json');
   expect(result.body).toHaveProperty('data');

@@ -1,0 +1,24 @@
+{
+  "name": "listing-report",
+  "version": "1.0.0",
+  "description": "Listing report api and front end",
+  "main": "/api/index.js",
+  "scripts": {
+    "install-all": "concurrently \"npm install --prefix ./api\" \"npm install --prefix ./front\"",
+    "dev": "concurrently \"npm run dev:server --prefix ./api\" \"npm run start --prefix ./front\"",
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buzzie-bee/listing-report.git"
+  },
+  "author": "Tom Bee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/buzzie-bee/listing-report/issues"
+  },
+  "homepage": "https://github.com/buzzie-bee/listing-report#readme",
+  "dependencies": {
+    "concurrently": "^6.0.0"
+  }
+}

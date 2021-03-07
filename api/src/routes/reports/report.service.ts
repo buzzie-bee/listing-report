@@ -262,68 +262,79 @@ const formatDate = (timestamp: number): string => {
 export const getMostContactsListings = async (): Promise<MostContactedListingsByMonth> => {
   // Split the contact ids into months, sort by contacts per id, grab data from listings, and return
 
-  const contacts: Contact[] = await processFile('./data/contacts.csv');
+  try {
+    const contacts: Contact[] = await processFile('./data/contacts.csv');
 
-  const listingsArray: Listing[] = await processFile('./data/listings.csv');
-  const listings: ListingsObject = convertListingsArrayToObject(listingsArray);
+    const listingsArray: Listing[] = await processFile('./data/listings.csv');
+    const listings: ListingsObject = convertListingsArrayToObject(
+      listingsArray
+    );
 
-  const initContactMonthData: ContactListingMonthData = {
-    total: 0,
-    monthData: {},
-    months: [],
-  };
+    const initContactMonthData: ContactListingMonthData = {
+      total: 0,
+      monthData: {},
+      months: [],
+    };
 
-  const contactMonthData: ContactListingMonthData = contacts.reduce(
-    (data, { listing_id, contact_date }: Contact) => {
-      const id: string = listing_id.toString();
-      const month = formatDate(contact_date);
+    const contactMonthData: ContactListingMonthData = contacts.reduce(
+      (data, { listing_id, contact_date }: Contact) => {
+        const id: string = listing_id.toString();
+        const month = formatDate(contact_date);
 
-      if (data.monthData[month]) {
-        if (data.monthData[month][id]) {
-          data.monthData[month][id]++;
+        if (data.monthData[month]) {
+          if (data.monthData[month][id]) {
+            data.monthData[month][id]++;
+          } else {
+            data.monthData[month][id] = 1;
+          }
         } else {
-          data.monthData[month][id] = 1;
+          data.months.push(month);
+          data.monthData[month] = { [id]: 1 };
         }
-      } else {
-        data.months.push(month);
-        data.monthData[month] = { [id]: 1 };
-      }
 
-      data.total++;
-      return data;
-    },
-    initContactMonthData
-  );
+        data.total++;
+        return data;
+      },
+      initContactMonthData
+    );
 
-  if (contactMonthData.total === 0) {
-    throw 'No month data';
+    if (contactMonthData.total === 0) {
+      throw 'No month data';
+    }
+
+    const monthData = contactMonthData.months.map((month) => {
+      const allContacts = Object.entries(contactMonthData.monthData[month]).map(
+        (data) => data
+      );
+      allContacts.sort(
+        (a: [string, number], b: [string, number]) => b[1] - a[1]
+      );
+
+      const topFiveListings = allContacts.slice(0, 5);
+
+      const monthListings: MostContactedListing[] = topFiveListings.map(
+        ([id, count]: [string, number], idx: number) => {
+          return {
+            ranking: idx + 1,
+            id: id,
+            make: listings[id].make,
+            price: listings[id].price,
+            mileage: listings[id].mileage,
+            contacts: count,
+          };
+        }
+      );
+
+      return { month, listings: monthListings };
+    });
+
+    return {
+      data: monthData,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      data: [],
+    };
   }
-
-  const monthData = contactMonthData.months.map((month) => {
-    const allContacts = Object.entries(contactMonthData.monthData[month]).map(
-      (data) => data
-    );
-    allContacts.sort((a: [string, number], b: [string, number]) => b[1] - a[1]);
-
-    const topFiveListings = allContacts.slice(0, 5);
-
-    const monthListings: MostContactedListing[] = topFiveListings.map(
-      ([id, count]: [string, number], idx: number) => {
-        return {
-          ranking: idx + 1,
-          id: id,
-          make: listings[id].make,
-          price: listings[id].price,
-          mileage: listings[id].mileage,
-          contacts: count,
-        };
-      }
-    );
-
-    return { month, listings: monthListings };
-  });
-
-  return {
-    data: monthData,
-  };
 };

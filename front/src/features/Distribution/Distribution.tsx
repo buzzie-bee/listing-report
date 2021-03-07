@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useAsync } from 'react-async-hook';
+import { Loading } from '../../components/Loading/Loading';
 import { Table } from '../../components/Table/Table';
 import { TableHeaders } from '../../components/Table/TableHeaders';
 import { TableRow } from '../../components/Table/TableRow';
@@ -13,14 +14,14 @@ export const Distribution = () => {
   const { loading, error, result } = useAsync(fetchDistribution, []);
 
   return (
-    <div>
+    <div className="max-w-lg">
       <div className="py-1 sm:py-8">
         <h1 className="text-2xl font-semibold">
           Percentual distribution of available cars by Make
         </h1>
       </div>
 
-      {loading && <div>Loading</div>}
+      {loading && <Loading />}
       {error && (
         <div>
           <p>Error - something went wrong</p>
