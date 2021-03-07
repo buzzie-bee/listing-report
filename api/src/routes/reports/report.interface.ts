@@ -32,7 +32,7 @@ export interface DistributionData {
   distributionData: Distribution[];
 }
 
-export interface AveragePopularPrice {
+export interface PopularAveragePrice {
   averagePrice: number;
 }
 
@@ -44,6 +44,23 @@ export interface Listing {
   seller_type: 'dealer' | 'private' | 'other';
 }
 
+export interface Contact {
+  listing_id: number;
+  contact_date: number;
+}
+
+export interface ContactListingIdData {
+  total: number;
+  idCounts: {
+    [key: string]: number;
+  };
+  ids: string[];
+}
+
+export interface ListingsObject {
+  [key: string]: Listing;
+}
+
 export interface MostContactedListings {
-  [key: number]: Listing;
+  [key: string]: Listing;
 }

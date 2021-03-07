@@ -1,6 +1,10 @@
 import express, { Request, Response } from 'express';
 import * as ReportService from './report.service';
-import { AverageSellerPrice, DistributionData } from './report.interface';
+import {
+  AverageSellerPrice,
+  DistributionData,
+  PopularAveragePrice,
+} from './report.interface';
 
 export const reportRouter = express.Router();
 
@@ -15,7 +19,7 @@ reportRouter.get('/average', async (req: Request, res: Response) => {
   }
 });
 
-// GET data for seller average
+// GET data for distributions
 reportRouter.get('/distribution', async (req: Request, res: Response) => {
   try {
     const distributionData: DistributionData = await ReportService.getDistributionData();
@@ -25,3 +29,17 @@ reportRouter.get('/distribution', async (req: Request, res: Response) => {
     res.status(500).send(e.message);
   }
 });
+
+// GET average price of top 30%
+reportRouter.get(
+  '/averagePopularPrice',
+  async (req: Request, res: Response) => {
+    try {
+      const averagePrice: PopularAveragePrice = await ReportService.getPopularAveragePrice();
+
+      res.status(200).send(averagePrice);
+    } catch (e) {
+      res.status(500).send(e.message);
+    }
+  }
+);

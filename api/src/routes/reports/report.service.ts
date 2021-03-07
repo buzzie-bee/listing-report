@@ -1,24 +1,29 @@
 import {
   AverageSellerPrice,
+  Contact,
+  ContactListingIdData,
   Distribution,
   DistributionData,
   Listing,
   ListingSellerData,
   ListingsMakeData,
+  ListingsObject,
+  PopularAveragePrice,
 } from './report.interface';
 import fs from 'fs';
 import csvParse from 'csv-parse';
 
-const processListingFile = async (fileName: string) => {
+const processFile = async (fileName: string, cast = true) => {
   // Parses the listing csv and returns an array of Listing objects
 
-  const records: Listing[] = [];
+  const records = [];
 
   const parser = fs.createReadStream(fileName).pipe(
     csvParse({
       columns: true,
       cast: (value) => {
         if (
+          cast &&
           value &&
           typeof value === 'string' &&
           !Number.isNaN(Number(value))
@@ -32,18 +37,17 @@ const processListingFile = async (fileName: string) => {
   );
 
   for await (const record of parser) {
-    // Casting for now. Need to implement validation
-    records.push(record as Listing);
+    records.push(record);
   }
   return records;
 };
 
-const calculateAverageSellerPrice = async (): Promise<AverageSellerPrice> => {
+export const getAverageSellerPrice = async (): Promise<AverageSellerPrice> => {
   // Gets the data from the listings, reduces it to get the count and pricing for each seller type
   // Then calculates the average.
   // Returns -1 in the fields if there were any errors
 
-  const records: Listing[] = await processListingFile('./data/listings.csv');
+  const records: Listing[] = await processFile('./data/listings.csv');
 
   const sellerInitData: ListingSellerData = {
     errors: 0,
@@ -105,15 +109,11 @@ const calculateAverageSellerPrice = async (): Promise<AverageSellerPrice> => {
   };
 };
 
-export const getAverageSellerPrice = async (): Promise<AverageSellerPrice> => {
-  return calculateAverageSellerPrice();
-};
-
-const calculateDistributionData = async (): Promise<DistributionData> => {
+export const getDistributionData = async (): Promise<DistributionData> => {
   // reduce the listings.csv data to find number of times each make appears and then
   // calculate distribution of each
 
-  const records: Listing[] = await processListingFile('./data/listings.csv');
+  const records: Listing[] = await processFile('./data/listings.csv');
 
   const initData: ListingsMakeData = {
     total: 0,
@@ -166,6 +166,69 @@ const calculateDistributionData = async (): Promise<DistributionData> => {
   };
 };
 
-export const getDistributionData = async (): Promise<DistributionData> => {
-  return calculateDistributionData();
+const convertListingsArrayToObject = (listings: Listing[]): ListingsObject => {
+  const initData: ListingsObject = {};
+
+  return listings.reduce((data, listing: Listing) => {
+    data[listing.id.toString()] = listing;
+    return data;
+  }, initData);
+};
+
+export const getPopularAveragePrice = async (): Promise<PopularAveragePrice> => {
+  try {
+    const contacts: Contact[] = await processFile('./data/contacts.csv');
+    const listingsArray: Listing[] = await processFile('./data/listings.csv');
+
+    const listings: ListingsObject = convertListingsArrayToObject(
+      listingsArray
+    );
+
+    const initContactData: ContactListingIdData = {
+      total: 0,
+      idCounts: {},
+      ids: [],
+    };
+
+    const listingData: ContactListingIdData = contacts.reduce(
+      (data, { listing_id }: Contact) => {
+        const id: string = listing_id.toString();
+
+        if (data.idCounts[id]) {
+          data.idCounts[id]++;
+        } else {
+          data.ids.push(id);
+          data.idCounts[id] = 1;
+        }
+        data.total++;
+        return data;
+      },
+      initContactData
+    );
+
+    listingData.ids.sort(
+      (a: string, b: string) =>
+        listingData.idCounts[b] - listingData.idCounts[a]
+    );
+
+    const thirtyPercentPos = Math.floor(listingData.total * 0.3);
+
+    const popularIds = listingData.ids.slice(0, thirtyPercentPos);
+
+    const totalPopularPrice = popularIds.reduce((total, id: string) => {
+      if (listings[id]) {
+        total += listings[id].price;
+      }
+
+      return total;
+    }, 0);
+
+    const averagePrice = Math.round(totalPopularPrice / thirtyPercentPos);
+
+    return { averagePrice };
+  } catch (error) {
+    return {
+      averagePrice: -1,
+    };
+  }
 };

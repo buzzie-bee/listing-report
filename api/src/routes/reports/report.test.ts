@@ -24,3 +24,11 @@ it('Returns a distribution report object', async () => {
   expect(result.body).toHaveProperty('distributionData');
   expect(result.body.distributionData).toBeInstanceOf(Array);
 });
+
+it('Returns an average price object', async () => {
+  const result = await supertest(testApp).get('/reports/averagePopularPrice');
+  expect(result.status).toEqual(200);
+  expect(result.type).toBe('application/json');
+  expect(result.body).toHaveProperty('averagePrice');
+  expect(typeof result.body.averagePrice).toBe('number');
+});
