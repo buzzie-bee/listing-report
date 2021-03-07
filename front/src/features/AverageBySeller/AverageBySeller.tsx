@@ -4,6 +4,7 @@ import { useAsync } from 'react-async-hook';
 import { Table } from '../../components/Table/Table';
 import { TableHeaders } from '../../components/Table/TableHeaders';
 import { TableRow } from '../../components/Table/TableRow';
+import { formatPrice } from '../../helpers/formatPrice';
 
 import { AverageSellerPrice } from './AverageBySeller.interface';
 
@@ -17,7 +18,9 @@ export const AverageBySeller = () => {
   return (
     <div>
       <div className="py-1 sm:py-8">
-        <h1 className="text-2xl font-semibold">Average by seller</h1>
+        <h1 className="text-2xl font-semibold">
+          Average Listing Selling Price per Seller Type
+        </h1>
       </div>
 
       {loading && <div>Loading</div>}
@@ -35,7 +38,7 @@ export const AverageBySeller = () => {
               ([type, price]: [string, number]) => (
                 <TableRow
                   key={`seller-${type}`}
-                  values={[type, price.toString()]}
+                  values={[type, formatPrice(price)]}
                 />
               )
             )}

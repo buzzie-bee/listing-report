@@ -3,6 +3,8 @@ import { useAsync } from 'react-async-hook';
 import { Table } from '../../components/Table/Table';
 import { TableHeaders } from '../../components/Table/TableHeaders';
 import { TableRow } from '../../components/Table/TableRow';
+import { formatMileage } from '../../helpers/formatMileage';
+import { formatPrice } from '../../helpers/formatPrice';
 import {
   MostContactedListing,
   MostContactListingsMonth,
@@ -18,7 +20,16 @@ export const TopFiveByMonth = () => {
   const renderMonthTable = (listings: MostContactedListing[]) => {
     return (
       <Table>
-        <TableHeaders headers={['Make', 'Distribution']} />
+        <TableHeaders
+          headers={[
+            'Ranking',
+            'Listing Id',
+            'Make',
+            'Selling Price',
+            'Mileage',
+            '# of Contacts',
+          ]}
+        />
         <tbody>
           {listings.map(
             ({
@@ -35,8 +46,8 @@ export const TopFiveByMonth = () => {
                   ranking.toString(),
                   id,
                   make,
-                  price.toString(),
-                  mileage.toString(),
+                  formatPrice(price),
+                  formatMileage(mileage),
                   contacts.toString(),
                 ]}
               />
@@ -50,7 +61,9 @@ export const TopFiveByMonth = () => {
   return (
     <div>
       <div className="py-1 sm:py-8">
-        <h1 className="text-2xl font-semibold">Top five listings</h1>
+        <h1 className="text-2xl font-semibold">
+          The Top 5 most contacted listings per Month
+        </h1>
       </div>
 
       {loading && <div>Loading</div>}
@@ -62,8 +75,10 @@ export const TopFiveByMonth = () => {
       )}
       {result &&
         result.data.map((monthData: MostContactListingsMonth) => (
-          <div key={`${monthData.month}`}>
-            <h4>{monthData.month}</h4>
+          <div key={`${monthData.month}`} className="mt-8">
+            <h4 className="text-lg font-semibold mb-2 ml-8 ">
+              {monthData.month}
+            </h4>
             {renderMonthTable(monthData.listings)}
           </div>
         ))}

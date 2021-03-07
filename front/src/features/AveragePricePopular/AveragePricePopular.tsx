@@ -3,6 +3,7 @@ import { useAsync } from 'react-async-hook';
 import { Table } from '../../components/Table/Table';
 import { TableHeaders } from '../../components/Table/TableHeaders';
 import { TableRow } from '../../components/Table/TableRow';
+import { formatPrice } from '../../helpers/formatPrice';
 
 export const AveragePricePopular = () => {
   const fetchAveragePricePopular = useCallback(async () => {
@@ -14,7 +15,9 @@ export const AveragePricePopular = () => {
   return (
     <div>
       <div className="py-1 sm:py-8">
-        <h1 className="text-2xl font-semibold">Popular listings</h1>
+        <h1 className="text-2xl font-semibold">
+          Average price of the 30% most contacted listings
+        </h1>
       </div>
 
       {loading && <div>Loading</div>}
@@ -28,7 +31,7 @@ export const AveragePricePopular = () => {
         <Table>
           <TableHeaders headers={['Average Price']} />
           <tbody>
-            {result && <TableRow values={[result.averagePrice.toString()]} />}
+            {result && <TableRow values={[formatPrice(result.averagePrice)]} />}
           </tbody>
         </Table>
       )}

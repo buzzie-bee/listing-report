@@ -15,7 +15,9 @@ export const Distribution = () => {
   return (
     <div>
       <div className="py-1 sm:py-8">
-        <h1 className="text-2xl font-semibold">Distribution</h1>
+        <h1 className="text-2xl font-semibold">
+          Percentual distribution of available cars by Make
+        </h1>
       </div>
 
       {loading && <div>Loading</div>}
@@ -33,7 +35,7 @@ export const Distribution = () => {
               ({ make, distribution }: DistributionType) => (
                 <TableRow
                   key={`tr-${make}`}
-                  values={[make, distribution.toString()]}
+                  values={[make, `${distribution.toString()}%`]}
                 />
               )
             )}
