@@ -66,7 +66,7 @@ export interface MostContactedListing {
   id: string;
   make: string;
   price: number;
-  milage: number;
+  mileage: number;
   contacts: number;
 }
 

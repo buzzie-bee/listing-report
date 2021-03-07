@@ -313,7 +313,7 @@ export const getMostContactsListings = async (): Promise<MostContactedListingsBy
           id: id,
           make: listings[id].make,
           price: listings[id].price,
-          milage: listings[id].mileage,
+          mileage: listings[id].mileage,
           contacts: count,
         };
       }
