@@ -2,9 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import config from './config/config';
+
 import { errorHandler } from './middleware/error.middleware';
 import { routeNotFoundHandler } from './middleware/routeNotFound.middleware';
-import { defaultRouter } from './routes/default/default.router';
+
+import { reportRouter } from './routes/reports/report.router';
 
 // Init express
 
@@ -14,9 +16,7 @@ if (!process.env.PORT) {
 
 const app = express();
 
-/**
- *  App Configuration
- */
+// App Configuration
 
 app.use(helmet());
 app.use(cors());
@@ -24,7 +24,7 @@ app.use(express.json());
 
 // Feature routers
 
-app.use('/api', defaultRouter);
+app.use('/reports', reportRouter);
 
 // Error middlewares
 
@@ -35,7 +35,7 @@ app.use(routeNotFoundHandler);
 
 export const testApp = app;
 
-// Start server
+// Start server if not in test env
 
 const { PORT } = config;
 
