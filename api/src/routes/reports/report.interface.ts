@@ -4,6 +4,16 @@ export interface AverageSellerPrice {
   other: number;
 }
 
+export interface ListingSellerData {
+  errors: number;
+  dealers: number;
+  dealerTotalPrice: number;
+  privates: number;
+  privateTotalPrice: number;
+  others: number;
+  otherTotalPrice: number;
+}
+
 export interface DistributionData {
   [key: string]: number;
 }
@@ -17,7 +27,7 @@ export interface Listing {
   make: string;
   price: number;
   mileage: number;
-  sellerType: 'dealer' | 'private' | 'other';
+  seller_type: 'dealer' | 'private' | 'other';
 }
 
 export interface MostContactedListings {
