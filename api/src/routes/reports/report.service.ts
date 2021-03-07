@@ -220,7 +220,8 @@ export const getPopularAveragePrice = async (): Promise<PopularAveragePrice> => 
         contactData.idCounts[b] - contactData.idCounts[a]
     );
 
-    const thirtyPercentPos = Math.floor(contactData.total * 0.3);
+    const listingCount = contactData.ids.length;
+    const thirtyPercentPos = Math.floor(listingCount * 0.3);
 
     const popularIds = contactData.ids.slice(0, thirtyPercentPos);
 
