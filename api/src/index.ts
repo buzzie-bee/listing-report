@@ -24,7 +24,7 @@ app.use(express.json());
 
 // Feature routers
 
-app.use('/reports', reportRouter);
+app.use('/api/reports', reportRouter);
 
 // Error middlewares
 
