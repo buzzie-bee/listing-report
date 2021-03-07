@@ -1,29 +1,7 @@
-# Logs
-logs
-*.log
-npm-debug.log*
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
+#API ignores
+api/node_modules
+api/dist
+.vscode
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-dist
-
-# Dependency directories
-node_modules/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# dotenv environment variables file
 .env
-.env.test

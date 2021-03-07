@@ -1,0 +1,6 @@
+# Ignore artifacts:
+dist
+coverage
+
+# Prevent it from spoiling the formatting in tsconfig
+tsconfig.json
