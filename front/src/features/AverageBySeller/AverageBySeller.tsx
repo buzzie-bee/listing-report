@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
-import { useAsync } from 'react-async-hook';
+// Had to do this to get mock to work in jest - need to find better way
+import * as reactAsyncHook from 'react-async-hook';
 import { Loading } from '../../components/Loading/Loading';
-
 import { Table } from '../../components/Table/Table';
 import { TableHeaders } from '../../components/Table/TableHeaders';
 import { TableRow } from '../../components/Table/TableRow';
+
 import { formatPrice } from '../../helpers/formatPrice';
 
 import { AverageSellerPrice } from './AverageBySeller.interface';
@@ -14,7 +15,10 @@ export const AverageBySeller = () => {
     return await (await fetch('/api/reports/average')).json();
   }, []);
 
-  const { loading, error, result } = useAsync(fetchAverageBySeller, []);
+  const { loading, error, result } = reactAsyncHook.useAsync(
+    fetchAverageBySeller,
+    []
+  );
 
   return (
     <div className="max-w-lg">

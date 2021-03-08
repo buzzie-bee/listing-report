@@ -1,3 +1,4 @@
+// .service contains all the data fetching
 import fs from 'fs';
 import csvParse from 'csv-parse';
 
@@ -19,6 +20,7 @@ import {
 
 const processFile = async (fileName: string, cast = true) => {
   // Parses the listing csv and returns an array of Listing objects
+  // Casts number strings into Numbers
 
   const records = [];
 

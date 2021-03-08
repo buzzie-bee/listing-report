@@ -1,11 +1,15 @@
 import { useCallback } from 'react';
-import { useAsync } from 'react-async-hook';
+// Had to do this to get mock to work in jest - need to find better way
+import * as reactAsyncHook from 'react-async-hook';
+
 import { Loading } from '../../components/Loading/Loading';
 import { Table } from '../../components/Table/Table';
 import { TableHeaders } from '../../components/Table/TableHeaders';
 import { TableRow } from '../../components/Table/TableRow';
+
 import { formatMileage } from '../../helpers/formatMileage';
 import { formatPrice } from '../../helpers/formatPrice';
+
 import {
   MostContactedListing,
   MostContactListingsMonth,
@@ -16,7 +20,7 @@ export const TopFiveByMonth = () => {
     return await (await fetch('/api/reports/mostContactedListings')).json();
   }, []);
 
-  const { loading, error, result } = useAsync(fetchTopFive, []);
+  const { loading, error, result } = reactAsyncHook.useAsync(fetchTopFive, []);
 
   const renderMonthTable = (listings: MostContactedListing[]) => {
     return (
@@ -32,7 +36,7 @@ export const TopFiveByMonth = () => {
           ]}
         />
         <tbody>
-          {listings.map(
+          {listings?.map(
             ({
               ranking,
               id,
@@ -75,7 +79,7 @@ export const TopFiveByMonth = () => {
         </div>
       )}
       {result &&
-        result.data.map((monthData: MostContactListingsMonth) => (
+        result.data?.map((monthData: MostContactListingsMonth) => (
           <div key={`${monthData.month}`} className="mt-8">
             <h4 className="text-lg font-semibold mb-2 ml-8 ">
               {monthData.month}

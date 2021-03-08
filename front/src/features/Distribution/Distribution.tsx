@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { useAsync } from 'react-async-hook';
+// Had to do this to get mock to work in jest - need to find better way
+import * as reactAsyncHook from 'react-async-hook';
 import { Loading } from '../../components/Loading/Loading';
 import { Table } from '../../components/Table/Table';
 import { TableHeaders } from '../../components/Table/TableHeaders';
@@ -11,7 +12,10 @@ export const Distribution = () => {
     return await (await fetch('/api/reports/distribution')).json();
   }, []);
 
-  const { loading, error, result } = useAsync(fetchDistribution, []);
+  const { loading, error, result } = reactAsyncHook.useAsync(
+    fetchDistribution,
+    []
+  );
 
   return (
     <div className="max-w-lg">
@@ -32,7 +36,7 @@ export const Distribution = () => {
         <Table>
           <TableHeaders headers={['Make', 'Distribution']} />
           <tbody>
-            {result.distributionData.map(
+            {result.distributionData?.map(
               ({ make, distribution }: DistributionType) => (
                 <TableRow
                   key={`tr-${make}`}

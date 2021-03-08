@@ -4,9 +4,9 @@
 # API
 api/node_modules
 api/dist
-.vscode
+api/.env
 
-.env
+api/coverage
 
 # Front End
 
