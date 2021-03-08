@@ -77,58 +77,68 @@ Currently implemented are the following API endpoints:
 Calculates the average sale price of cars from the different categories of dealers.
 
 Returns a json object with the following data:
+
+```
 {
-dealer: number, // average price of cars sold by dealers
-private number, // average price of cars sold by private sellers
-other number // average price of cars sold by other sellers
+  dealer: number, // average price of cars sold by dealers
+  private number, // average price of cars sold by private sellers
+  other number // average price of cars sold by other sellers
 }
+```
 
 ### /api/reports/distribution
 
 Calculates the percentual distribution of each car make.
 
 Returns a json object with the following data:
+
+```
 {
-total: number, // total number of listings
-distributionData: [
-{
-make: string, // car manufacturer
-distribution: number // percent makeup of listings
-} ...
-]
+  total: number, // total number of listings
+  distributionData: [
+    {
+      make: string, // car manufacturer
+      distribution: number // percent makeup of listings
+    } ...
+  ]
 }
+```
 
 ### /api/reports/averagePopularPrice
 
 Calculates the average sale price of cars from the top 30% most viewed listings
 
 Returns a json object with the following data:
+
+```
 {
-averagePrice: number // average price of most popular listings
+  averagePrice: number // average price of most popular listings
 }
+```
 
 ### /api/reports/mostContactedListings
 
 Finds the top 5 most contacted listings by month
 
 Returns a json object with the following data:
+
+```
 {
-data: [
-{
-month: string // ISO Year-Month string (i.e. 2020-05)
-listings: [
-{
-ranking: number, // Ranking of listing in the given month by contact count
-id: string, // ID number of listing
-make: string, // Manufacturer of car in listing
-price: number, // Price of the listing
-mileage: number, // Mileage of the listing
-contacts: number, // Number of times the listing was contacted
-}, ...
-]
-}, ...
-]
+  data: [
+    {
+      month: string // ISO Year-Month string (i.e. 2020-05)
+      listings: [
+    {
+      ranking: number, // Ranking of listing in the given month by contact count
+      id: string, // ID number of listing
+      make: string, // Manufacturer of car in listing
+      price: number, // Price of the listing
+      mileage: number, // Mileage of the listing
+      contacts: number, // Number of times the listing was contacted
+    }, ...
+  ]
 }
+```
 
 ## Troubleshooting
 
