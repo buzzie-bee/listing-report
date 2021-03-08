@@ -32,6 +32,12 @@ Install all packages for both the front and backend using
 
 `npm run install-all`
 
+Time for a bit of manual set up (sorry!). The port for the api is stored in a .env file.
+
+You can either delete the .example from the .env.example file to make it a .env file, or if you like to live dangerously (it wouldn't appear in the files folder and may have odd permissions) you can try echoing the values from the command line in the root directory using the following command:
+
+`echo "hello" > ~/Desktop/new_file.txt` - or just delete .example from the example .env file...
+
 Start the api and front end using
 
 `npm run dev` from the root directory
